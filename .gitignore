@@ -1,7 +1,10 @@
 .idea/
 .venv/
 .vscode/
-
+/temp/*
+!/temp/.gitkeep
+/uploads/*
+!/uploads/.gitkeep
 
 
 ### Django ###

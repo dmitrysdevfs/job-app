@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "location",
     "speciality",
     "position",
+    "kved",
 ]
 
 MIDDLEWARE = [

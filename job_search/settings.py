@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "user",
     "location",
     "speciality",
+    "position",
 ]
 
 MIDDLEWARE = [

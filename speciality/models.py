@@ -7,18 +7,19 @@ class KnowledgeField(models.Model):
     code = models.CharField(
         max_length=2,
         unique=True,
-        validators=[RegexValidator(r'^\d{2}$', 'Code must be 2 digits')]
+        validators=[RegexValidator(r'^\d{2}$', 'Code must be 2 digits')],
+        verbose_name="Код"
     )
-    name = models.CharField(max_length=200)
-    order = models.IntegerField(default=0)
+    name = models.CharField(max_length=200, verbose_name="Назва")
+    order = models.IntegerField(default=0, verbose_name="Порядок")
 
     # TODO: Додати версійність пізніше
     # version = models.ForeignKey('ClassificationVersion', ...)
 
     class Meta:
         ordering = ['order', 'code']
-        verbose_name = "Knowledge Field"
-        verbose_name_plural = "Knowledge Fields"
+        verbose_name = "Галузь знань"
+        verbose_name_plural = "Галузі знань"
 
     def __str__(self):
         return f"{self.code} - {self.name}"
@@ -29,31 +30,34 @@ class Speciality(models.Model):
     knowledge_field = models.ForeignKey(
         KnowledgeField,
         on_delete=models.CASCADE,
-        related_name='specialities'
+        related_name='specialities',
+        verbose_name="Галузь знань"
     )
     code = models.CharField(
         max_length=10,
         unique=True,
-        validators=[RegexValidator(r'^\d{3,10}$', 'Code must be 3-10 digits')]
+        validators=[RegexValidator(r'^\d{3,10}$', 'Code must be 3-10 digits')],
+        verbose_name="Код"
     )
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, verbose_name="Назва")
     parent = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name='children'
+        related_name='children',
+        verbose_name="Батьківська спеціальність"
     )
-    level = models.IntegerField(default=1)
-    order = models.IntegerField(default=0)
+    level = models.IntegerField(default=1, verbose_name="Рівень")
+    order = models.IntegerField(default=0, verbose_name="Порядок")
 
     # TODO: Додати версійність пізніше
     # version = models.ForeignKey('ClassificationVersion', ...)
 
     class Meta:
         ordering = ['knowledge_field', 'level', 'order', 'code']
-        verbose_name = "Speciality"
-        verbose_name_plural = "Specialities"
+        verbose_name = "Спеціальність"
+        verbose_name_plural = "Спеціальності"
         indexes = [
             models.Index(fields=['knowledge_field', 'code']),
         ]

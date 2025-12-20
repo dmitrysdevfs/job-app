@@ -80,7 +80,7 @@ class Settlement(models.Model):
     longitude = models.FloatField(null=True, blank=True, verbose_name="Довгота")
 
     def __str__(self):
-        return f"{self.name} ({self.get_category_display()})"
+        return f"{self.name} ({self.get_category_display()}), {self.community.district.region.name} обл., {self.community.district.name} р-н"
 
     class Meta:
         verbose_name = "Населений пункт"

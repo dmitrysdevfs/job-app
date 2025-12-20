@@ -131,7 +131,7 @@ class Position(models.Model):
     )
 
     def __str__(self):
-        return f"{self.code} - {self.name}"
+        return f"{self.code} - {self.name} (Група: {self.group.name})"
 
     class Meta:
         verbose_name = "Професійна назва роботи"
@@ -179,7 +179,12 @@ class JobTitle(models.Model):
     )
 
     def __str__(self):
-        return f"{self.code} - {self.name}"
+        context = ""
+        if self.position:
+            context = f" (Посада: {self.position.name})"
+        elif self.group:
+            context = f" (Група: {self.group.name})"
+        return f"{self.code} - {self.name}{context}"
 
     class Meta:
         verbose_name = "Детальна назва роботи"

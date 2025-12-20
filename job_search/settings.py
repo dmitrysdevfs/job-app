@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "kved",
     "dictionary",
     "employer",
+    "vacancy",
 ]
 
 MIDDLEWARE = [

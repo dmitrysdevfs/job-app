@@ -25,6 +25,7 @@ class Employer(models.Model):
     brand_name = models.CharField(
         max_length=255, 
         blank=True, 
+        default="",
         verbose_name="Бренд / Публічна назва"
     )
     tax_id = models.CharField(
@@ -57,10 +58,12 @@ class Employer(models.Model):
     )
     description = models.TextField(
         blank=True, 
+        default="",
         verbose_name="Про роботодавця"
     )
     website = models.URLField(
         blank=True, 
+        default="",
         verbose_name="Веб-сайт"
     )
     logo = models.ImageField(

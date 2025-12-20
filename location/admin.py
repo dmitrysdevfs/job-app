@@ -24,7 +24,7 @@ class CommunityAdmin(admin.ModelAdmin):
 @admin.register(Settlement)
 class SettlementAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'community', 'code')
-    search_fields = ('name', 'code')
+    search_fields = ('name', 'code', 'community__name', 'community__district__name', 'community__district__region__name')
     list_filter = ('category',)
     autocomplete_fields = ('community',)
 

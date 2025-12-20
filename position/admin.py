@@ -45,7 +45,7 @@ class GroupAdmin(admin.ModelAdmin):
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
     list_display = ('code', 'name', 'group')
-    search_fields = ('code', 'name')
+    search_fields = ('code', 'name', 'group__name')
     autocomplete_fields = ('group',)
     list_filter = ('group',)
     ordering = ('code',)
@@ -54,7 +54,7 @@ class PositionAdmin(admin.ModelAdmin):
 @admin.register(JobTitle)
 class JobTitleAdmin(admin.ModelAdmin):
     list_display = ('code', 'name', 'position', 'group')
-    search_fields = ('code', 'name')
+    search_fields = ('code', 'name', 'position__name', 'group__name')
     autocomplete_fields = ('position', 'group', 'subclass')
     list_filter = ('position', 'group')
     ordering = ('code',)

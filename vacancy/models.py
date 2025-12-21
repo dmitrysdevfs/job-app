@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
 
@@ -11,6 +13,13 @@ class Vacancy(models.Model):
         ('EUR', '€ (Євро)'),
     )
 
+    STATUS_CHOICES = (
+        ('active', 'Активна'),
+        ('filled', 'Укомплектована'),
+        ('withdrawn', 'Скасована (відсутність потреби)'),
+        ('expired', 'Протермінована (архів)'),
+    )
+
     # Core Info
     employer = models.ForeignKey(
         'employer.Employer',
@@ -19,6 +28,35 @@ class Vacancy(models.Model):
         verbose_name="Роботодавець"
     )
     title = models.CharField(max_length=255, verbose_name="Назва вакансії")
+    
+    # External Integration
+    external_id = models.CharField(
+        max_length=50, 
+        unique=True, 
+        null=True, 
+        blank=True, 
+        verbose_name="Внутрішній номер (ID)",
+        validators=[
+            RegexValidator(
+                regex=r'^\d{15}$',
+                message="ID повинен складатися з 15 цифр (Центр + Дата + Номер)"
+            )
+        ]
+    )
+    source = models.ForeignKey(
+        'dictionary.VacancySource',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='vacancies',
+        verbose_name="Джерело"
+    )
+    report_3pn_date = models.DateField(
+        null=True, 
+        blank=True, 
+        verbose_name="Дата звіту 3-ПН"
+    )
+
     description = models.TextField(verbose_name="Опис вакансії")
     requirements = models.TextField(blank=True, default="", verbose_name="Вимоги")
     responsibilities = models.TextField(blank=True, default="", verbose_name="Обов'язки")
@@ -89,11 +127,44 @@ class Vacancy(models.Model):
     )
 
     # Metadata
-    is_active = models.BooleanField(default=True, verbose_name="Активна")
-    published_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата публікації")
+    status = models.CharField(
+        max_length=20, 
+        choices=STATUS_CHOICES, 
+        default='active', 
+        verbose_name="Статус"
+    )
+    is_active = models.BooleanField(default=True, verbose_name="Активна (публічна)")
+    published_at = models.DateTimeField(default=timezone.now, verbose_name="Дата публікації")
+    confirmed_at = models.DateTimeField(null=True, blank=True, verbose_name="Дата підтвердження")
+    closed_at = models.DateTimeField(null=True, blank=True, verbose_name="Дата закриття")
     expires_at = models.DateTimeField(null=True, blank=True, verbose_name="Термін дії до")
+    
+    # Continuity & History
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='republications',
+        verbose_name="Попередня вакансія (ланцюжок)"
+    )
+    generation = models.PositiveIntegerField(default=1, verbose_name="Покоління")
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Створено")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Оновлено")
+
+    def save(self, *args, **kwargs):
+        # Автоматичний розрахунок покоління
+        if self.parent:
+            self.generation = self.parent.generation + 1
+        
+        # Автоматична дата закриття
+        if self.status != 'active' and not self.closed_at:
+            self.closed_at = timezone.now()
+        elif self.status == 'active':
+            self.closed_at = None
+
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Вакансія"

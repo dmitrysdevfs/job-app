@@ -63,3 +63,24 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class VacancySource(models.Model):
+    """Джерело вакансії (ДСЗ, Work.ua, robota.ua тощо)"""
+    name = models.CharField(max_length=100, unique=True, verbose_name="Назва")
+    code = models.SlugField(max_length=50, unique=True, verbose_name="Системний код")
+    icon = models.ImageField(
+        upload_to=partial(upload_to, folder_name='source_icons'),
+        null=True,
+        blank=True,
+        verbose_name="Іконка / Логотип"
+    )
+    order = models.IntegerField(default=0, verbose_name="Порядок")
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = "Джерело вакансій"
+        verbose_name_plural = "Джерела вакансій"
+
+    def __str__(self):
+        return self.name

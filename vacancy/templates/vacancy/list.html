@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Список вакансій</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
+        .vacancy-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .vacancy-card h2 { margin-top: 0; color: #333; }
+        .salary { color: #2c3e50; font-weight: bold; }
+        .details-link { display: inline-block; margin-top: 10px; color: #3498db; text-decoration: none; }
+        .details-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Доступні вакансії</h1>
+    <div class="vacancy-list">
+        {% for vacancy in vacancies %}
+            <div class="vacancy-card">
+                <h2>{{ vacancy.title }}</h2>
+                <p><strong>Роботодавець:</strong> {{ vacancy.employer }}</p>
+                <p><strong>Місто:</strong> {{ vacancy.location }}</p>
+                {% if vacancy.salary_min or vacancy.salary_max %}
+                    <p class="salary">
+                        Зарплата: 
+                        {% if vacancy.salary_min %}від {{ vacancy.salary_min }}{% endif %}
+                        {% if vacancy.salary_max %} до {{ vacancy.salary_max }}{% endif %}
+                        {{ vacancy.currency }}
+                    </p>
+                {% endif %}
+                <a href="{% url 'vacancy:detail' vacancy.pk %}" class="details-link">Детальніше</a>
+            </div>
+        {% empty %}
+            <p>Наразі немає відкритих вакансій.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

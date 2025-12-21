@@ -68,6 +68,12 @@ class Employer(models.Model):
         default="",
         verbose_name="Веб-сайт"
     )
+    address = models.CharField(
+        max_length=255, 
+        blank=True, 
+        default="", 
+        verbose_name="Юридична адреса / Офіс"
+    )
     logo = models.ImageField(
         upload_to=partial(upload_to, folder_name='employer_logos'), 
         null=True, 

@@ -9,6 +9,7 @@ class VacancyAdmin(admin.ModelAdmin):
         'title', 
         'employer', 
         'source',
+        'address',
         'external_id',
         'status',
         'generation_label',
@@ -32,6 +33,7 @@ class VacancyAdmin(admin.ModelAdmin):
     search_fields = (
         'title', 
         'description', 
+        'address',
         'employer__name', 
         'employer__brand_name'
     )

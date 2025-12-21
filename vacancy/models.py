@@ -38,8 +38,8 @@ class Vacancy(models.Model):
         verbose_name="Внутрішній номер (ID)",
         validators=[
             RegexValidator(
-                regex=r'^\d{15}$',
-                message="ID повинен складатися з 15 цифр (Центр + Дата + Номер)"
+                regex=r'^\d{14}$',
+                message="ID повинен складатися з 14 цифр (Центр + Дата + Номер)"
             )
         ]
     )
@@ -55,6 +55,12 @@ class Vacancy(models.Model):
         null=True, 
         blank=True, 
         verbose_name="Дата звіту 3-ПН"
+    )
+    address = models.CharField(
+        max_length=255, 
+        blank=True, 
+        default="", 
+        verbose_name="Адреса (вулиця, будинок)"
     )
 
     description = models.TextField(verbose_name="Опис вакансії")

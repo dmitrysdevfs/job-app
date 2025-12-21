@@ -1,4 +1,6 @@
+from functools import partial
 from django.db import models
+from core.utils import upload_to
 from django.conf import settings
 from django.core.validators import RegexValidator
 
@@ -67,7 +69,7 @@ class Employer(models.Model):
         verbose_name="Веб-сайт"
     )
     logo = models.ImageField(
-        upload_to='employer_logos/', 
+        upload_to=partial(upload_to, folder_name='employer_logos'), 
         null=True, 
         blank=True, 
         verbose_name="Логотип"

@@ -1,4 +1,6 @@
+from functools import partial
 from django.db import models
+from core.utils import upload_to
 
 
 class EmploymentType(models.Model):
@@ -46,6 +48,12 @@ class Degree(models.Model):
 class Tag(models.Model):
     """Тег / Ознака (Державна служба, Вакансія з житлом тощо)"""
     name = models.CharField(max_length=100, unique=True, verbose_name="Назва")
+    icon = models.ImageField(
+        upload_to=partial(upload_to, folder_name='tag_icons'), 
+        null=True, 
+        blank=True, 
+        verbose_name="Іконка / Логотип"
+    )
     order = models.IntegerField(default=0, verbose_name="Порядок")
 
     class Meta:

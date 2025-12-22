@@ -1,38 +1,61 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>Список вакансій</title>
-    <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
-        .vacancy-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .vacancy-card h2 { margin-top: 0; color: #333; }
-        .salary { color: #2c3e50; font-weight: bold; }
-        .details-link { display: inline-block; margin-top: 10px; color: #3498db; text-decoration: none; }
-        .details-link:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <h1>Доступні вакансії</h1>
-    <div class="vacancy-list">
-        {% for vacancy in vacancies %}
-            <div class="vacancy-card">
-                <h2>{{ vacancy.title }}</h2>
-                <p><strong>Роботодавець:</strong> {{ vacancy.employer }}</p>
-                <p><strong>Місто:</strong> {{ vacancy.location }}</p>
-                {% if vacancy.salary_min or vacancy.salary_max %}
-                    <p class="salary">
-                        Зарплата: 
-                        {% if vacancy.salary_min %}від {{ vacancy.salary_min }}{% endif %}
-                        {% if vacancy.salary_max %} до {{ vacancy.salary_max }}{% endif %}
-                        {{ vacancy.currency }}
-                    </p>
-                {% endif %}
-                <a href="{% url 'vacancy:detail' vacancy.pk %}" class="details-link">Детальніше</a>
-            </div>
-        {% empty %}
-            <p>Наразі немає відкритих вакансій.</p>
-        {% endfor %}
+{% extends "base.html" %}
+
+{% block title %}Вакансії - Job Search App{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h1 class="h2">Доступні вакансії</h1>
+        <p class="text-muted">Знайдіть свою наступну роботу серед {{ vacancies.count }} актуальних пропозицій</p>
     </div>
-</body>
-</html>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for vacancy in vacancies %}
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title fw-bold mb-0">{{ vacancy.title }}</h5>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Нова</span>
+                </div>
+
+                <h6 class="card-subtitle mb-3 text-muted">
+                    <i class="bi bi-building me-1"></i>{{ vacancy.employer }}
+                </h6>
+
+                <p class="card-text text-secondary mb-3">
+                    <i class="bi bi-geo-alt me-1"></i>{{ vacancy.location }}
+                </p>
+
+                {% if vacancy.salary_min or vacancy.salary_max %}
+                <div class="mb-3">
+                    <span class="fs-5 fw-bold text-dark">
+                        {% if vacancy.salary_min and vacancy.salary_max %}
+                        {{ vacancy.salary_min }} - {{ vacancy.salary_max }}
+                        {% elif vacancy.salary_min %}
+                        від {{ vacancy.salary_min }}
+                        {% else %}
+                        до {{ vacancy.salary_max }}
+                        {% endif %}
+                        {{ vacancy.currency }}
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="{% url 'vacancy:detail' vacancy.pk %}" class="btn btn-outline-primary w-100">
+                    Переглянути деталі
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info border-0 shadow-sm">
+            Наразі немає відкритих вакансій. Заходьте пізніше!
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

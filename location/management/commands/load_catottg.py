@@ -63,10 +63,27 @@ class Command(BaseCommand):
                 try:
                     if cat in ['O', 'K']: # Region
                         code = row["Перший рівень"]
-                        Region.objects.get_or_create(
+                        region, _ = Region.objects.get_or_create(
                             code=code,
                             defaults={'name': name, 'category': cat}
                         )
+                        
+                        # Для міст зі спеціальним статусом (Київ, Севастополь) 
+                        # CATOTTG часто використовує той самий код на всіх рівнях.
+                        # Щоб вони були доступні як Settlement, створимо технічні District та Community.
+                        if cat == 'K':
+                            district, _ = District.objects.get_or_create(
+                                code=code,
+                                defaults={'name': name, 'region': region}
+                            )
+                            community, _ = Community.objects.get_or_create(
+                                code=code,
+                                defaults={'name': name, 'district': district}
+                            )
+                            Settlement.objects.get_or_create(
+                                code=code,
+                                defaults={'name': name, 'category': 'M', 'community': community}
+                            )
                     
                     elif cat == 'P': # District
                         code = row["Другий рівень"]

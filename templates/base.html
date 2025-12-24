@@ -47,16 +47,42 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <a class="nav-link" href="{% url 'vacancy:list' %}">Вакансії</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'employer:list' %}">Роботодавці</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Про нас</a>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="bi bi-person-circle me-1"></i> {{ user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="#">Мій кабінет</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <form method="post" action="{% url 'logout' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item">Вийти</button>
+                </form>
+              </li>
+            </ul>
           </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Увійти</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-primary ms-lg-2" href="#">Реєстрація</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </div>

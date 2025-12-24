@@ -23,6 +23,7 @@ from .views import index
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("", index),
     path("vacancies/", include("vacancy.urls")),
     path("employers/", include("employer.urls")),

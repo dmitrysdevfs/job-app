@@ -5,8 +5,15 @@
 {% block content %}
 <nav aria-label="breadcrumb" class="mb-4">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'vacancy:list' %}{% if page %}?page={{ page }}{% endif %}">Всі
-        вакансії</a></li>
+    <li class="breadcrumb-item">
+      {% if employer_id %}
+      <a href="{% url 'employer:detail' employer_id %}{% if employer_page %}?page={{ employer_page }}{% endif %}">
+        Вакансії {{ vacancy.employer.brand_name|default:vacancy.employer.name }}
+      </a>
+      {% else %}
+      <a href="{% url 'vacancy:list' %}{% if page %}?page={{ page }}{% endif %}">Всі вакансії</a>
+      {% endif %}
+    </li>
     <li class="breadcrumb-item active" aria-current="page">{{ vacancy.title }}</li>
   </ol>
 </nav>

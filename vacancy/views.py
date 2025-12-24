@@ -12,5 +12,18 @@ def vacancy_list(request):
 def vacancy_detail(request, pk):
     """Детальна сторінка вакансії з підтримкою повернення на сторінку пагінації"""
     vacancy = get_object_or_404(Vacancy, pk=pk)
+    
+    # Контекст пагінації (зі списку вакансій)
     page = request.GET.get('page')
-    return render(request, "vacancy/detail.html", {"vacancy": vacancy, "page": page})
+    
+    # Контекст переходу від роботодавця
+    employer_id = request.GET.get('employer_id')
+    employer_page = request.GET.get('employer_page')
+    
+    context = {
+        "vacancy": vacancy, 
+        "page": page,
+        "employer_id": employer_id,
+        "employer_page": employer_page,
+    }
+    return render(request, "vacancy/detail.html", context)

@@ -46,7 +46,7 @@
     <div class="card h-100 border-0 shadow-sm transition-hover">
       <div class="card-body text-center">
         <!-- Logo -->
-        <a href="{% url 'employer:detail' employer.pk %}" class="text-decoration-none">
+        <a href="{% url 'employer:detail' employer.pk %}?list_page={{ page_obj.number }}" class="text-decoration-none">
           <div class="mb-3" style="height: 60px;">
             {% if employer.logo %}
             <img src="{{ employer.logo.url }}" alt="{{ employer }}" class="rounded"
@@ -78,7 +78,8 @@
         {% endif %}
       </div>
       <div class="card-footer bg-white border-0 py-3 text-center">
-        <a href="{% url 'employer:detail' employer.pk %}" class="btn btn-outline-primary btn-sm px-4">Про компанію</a>
+        <a href="{% url 'employer:detail' employer.pk %}?list_page={{ page_obj.number }}"
+          class="btn btn-outline-primary btn-sm px-4">Про компанію</a>
       </div>
     </div>
   </div>

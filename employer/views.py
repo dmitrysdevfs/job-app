@@ -27,4 +27,5 @@ class EmployerDetailView(DetailView):
         context['vacancies'] = page_obj.object_list
         context['page_obj'] = page_obj
         context['total_vacs'] = vacancies_qs.count()
+        context['list_page'] = self.request.GET.get('list_page')
         return context

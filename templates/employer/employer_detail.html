@@ -5,7 +5,8 @@
 {% block content %}
 <nav aria-label="breadcrumb" class="mb-4">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'employer:list' %}" class="text-decoration-none">Роботодавці</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'employer:list' %}{% if list_page %}?page={{ list_page }}{% endif %}"
+        class="text-decoration-none">Роботодавці</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ employer }}</li>
   </ol>
 </nav>
@@ -109,7 +110,8 @@
             <div class="d-flex justify-content-between align-items-start">
               <div>
                 <h5 class="fw-bold mb-1">
-                  <a href="{% url 'vacancy:detail' vacancy.pk %}" class="text-decoration-none text-dark">
+                  <a href="{% url 'vacancy:detail' vacancy.pk %}?employer_id={{ employer.pk }}&employer_page={{ page_obj.number }}"
+                    class="text-decoration-none text-dark">
                     {{ vacancy.title }}
                   </a>
                 </h5>
@@ -125,8 +127,8 @@
                   <span><i class="bi bi-clock me-1"></i>{{ vacancy.published_at|date:"d.m.Y" }}</span>
                 </div>
               </div>
-              <a href="{% url 'vacancy:detail' vacancy.pk %}"
-                class="btn btn-primary btn-sm px-4 rounded-pill">Детальніше</a>
+              <a href="{% url 'vacancy:detail' vacancy.pk %}?employer_id={{ employer.pk }}&employer_page={{ page_obj.number }}"
+                class="btn btn-primary btn-sm px-4">Детальніше</a>
             </div>
           </div>
         </div>

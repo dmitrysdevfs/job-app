@@ -1,4 +1,6 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
 from .models import Employer
 from core.utils import get_paginated_page
 
@@ -40,3 +42,20 @@ class EmployerDetailView(DetailView):
         context["total_vacs"] = vacancies_qs.count()
         context["list_page"] = self.request.GET.get("list_page")
         return context
+
+class EmployerUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Редагування профілю роботодавця"""
+    model = Employer
+    fields = [
+        'name', 'brand_name', 'tax_id', 'employer_type', 
+        'kved', 'location', 'description', 'website', 
+        'address', 'logo'
+    ]
+    template_name = "employer/employer_form.html"
+    
+    def test_func(self):
+        employer = self.get_object()
+        return self.request.user == employer.owner or self.request.user in employer.staff.all()
+
+    def get_success_url(self):
+        return reverse_lazy('employer:detail', kwargs={'pk': self.object.pk})

@@ -4,7 +4,10 @@ from core.utils import get_paginated_page
 
 def vacancy_list(request):
     """Список активних вакансій з пагінацією"""
-    vacancy_qs = Vacancy.objects.filter(is_active=True)
+    vacancy_qs = Vacancy.objects.select_related(
+        "employer", 
+        "location__community__district__region"
+    ).filter(is_active=True)
     page_obj = get_paginated_page(request, vacancy_qs, per_page=8)
     
     return render(request, "vacancy/list.html", {"page_obj": page_obj})

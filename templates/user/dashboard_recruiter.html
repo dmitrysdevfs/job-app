@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Мій кабінет (Рекрутер) | JobApp{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    <div class="list-group shadow-sm">
+      <a href="#" class="list-group-item list-group-item-action active">Огляд</a>
+      <a href="{% url 'vacancy:list' %}" class="list-group-item list-group-item-action">Мої вакансії</a>
+      <a href="#" class="list-group-item list-group-item-action">Пошук кандидатів</a>
+      <a href="#" class="list-group-item list-group-item-action">Профіль компанії</a>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h3>Панель рекрутера: {{ user.username }}</h3>
+        <p class="text-muted">Тут ви можете керувати вакансіями вашої компанії та шукати талантів.</p>
+
+        <div class="row mt-4">
+          <div class="col-md-4">
+            <div class="card bg-light border-0">
+              <div class="card-body text-center">
+                <div class="display-6 fw-bold text-primary">0</div>
+                <div class="text-muted">Активні вакансії</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-light border-0">
+              <div class="card-body text-center">
+                <div class="display-6 fw-bold text-success">0</div>
+                <div class="text-muted">Нові відгуки</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-light border-0">
+              <div class="card-body text-center">
+                <div class="display-6 fw-bold text-info">0</div>
+                <div class="text-muted">Збережені кандидати</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <a href="#" class="btn btn-primary">Створити нову вакансію</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

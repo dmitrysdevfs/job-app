@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Мій кабінет (Шукач) | JobApp{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    <div class="list-group shadow-sm">
+      <a href="#" class="list-group-item list-group-item-action active">Огляд</a>
+      <a href="#" class="list-group-item list-group-item-action">Мої резюме</a>
+      <a href="#" class="list-group-item list-group-item-action">Збережені вакансії</a>
+      <a href="#" class="list-group-item list-group-item-action">Відгуки</a>
+      <a href="#" class="list-group-item list-group-item-action">Налаштування</a>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h3>Вітаємо, {{ user.username }}!</h3>
+        <p class="text-muted">Це ваш кабінет шукача. Тут ви можете керувати своїми резюме та відстежувати відгуки.</p>
+
+        <div class="alert alert-info mt-4">
+          <i class="bi bi-info-circle me-2"></i>
+          Ваш профіль наразі порожній. Створіть анонімне резюме, щоб рекрутери могли вас знайти.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

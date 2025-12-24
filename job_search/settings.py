@@ -154,5 +154,5 @@ if DEBUG:
     ]
 
 # Auth redirects
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'user:dashboard'
 LOGOUT_REDIRECT_URL = '/'

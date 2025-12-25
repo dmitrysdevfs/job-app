@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     "dictionary",
     "employer",
     "vacancy",
+    "resume",
+    "favorite",
+    "notification",
     "debug_toolbar",
 ]
 

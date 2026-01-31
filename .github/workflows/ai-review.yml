@@ -1,0 +1,24 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ai-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    # Не запускати для fork PRs (немає доступу до secrets)
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: KonstZiv/ai-code-reviewer@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          google_api_key: ${{ secrets.GOOGLE_API_KEY }}

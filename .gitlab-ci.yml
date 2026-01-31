@@ -1,0 +1,14 @@
+stages:
+  - review
+
+ai-review:
+  image: ghcr.io/konstziv/ai-code-reviewer:1
+  stage: review
+  script:
+    - ai-review
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  allow_failure: true
+  variables:
+    GITLAB_TOKEN: $GITLAB_TOKEN
+    GOOGLE_API_KEY: $GOOGLE_API_KEY

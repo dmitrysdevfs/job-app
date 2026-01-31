@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Мої резюме | JobApp{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold">Мої резюме</h2>
+  <a href="{% url 'resume:create' %}" class="btn btn-primary">
+    <i class="bi bi-plus-lg me-1"></i> Створити резюме
+  </a>
+</div>
+
+{% if resumes %}
+<div class="row g-3">
+  {% for resume in resumes %}
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="fw-bold mb-1">{{ resume.title }}</h5>
+          <div class="text-muted small">
+            {% if resume.is_anonymous %}
+            <span class="badge bg-info-subtle text-dark border border-info-subtle me-2">
+              <i class="bi bi-incognito me-1"></i> Анонімне
+            </span>
+            {% endif %}
+            {% if not resume.is_active %}
+            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle me-2">Неактивне</span>
+            {% endif %}
+            <span class="me-3"><i class="bi bi-calendar-event me-1"></i> Оновлено: {{ resume.updated_at|date:"d.m.Y"
+              }}</span>
+            {% if resume.expected_salary %}
+            <span><i class="bi bi-cash-stack me-1"></i> {{ resume.expected_salary }} грн</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="btn-group">
+          <a href="{% url 'resume:update' resume.pk %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-pencil me-1"></i> Редагувати
+          </a>
+          <a href="{% url 'resume:delete' resume.pk %}" class="btn btn-outline-danger btn-sm">
+            <i class="bi bi-trash"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card border-0 shadow-sm bg-light">
+  <div class="card-body py-5 text-center">
+    <i class="bi bi-file-earmark-text fs-1 text-muted mb-3 d-block"></i>
+    <p class="text-muted mb-4">Ви ще не створили жодного резюме.</p>
+    <a href="{% url 'resume:create' %}" class="btn btn-primary px-4">Створити перше резюме</a>
+  </div>
+</div>
+{% endif %}
+
+<div class="mt-4">
+  <a href="{% url 'user:dashboard' %}" class="btn btn-link text-decoration-none">
+    <i class="bi bi-arrow-left me-1"></i> Повернутися до кабінету
+  </a>
+</div>
+{% endblock %}

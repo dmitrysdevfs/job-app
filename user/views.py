@@ -16,6 +16,15 @@ def register(request):
 
 @login_required
 def dashboard(request):
+    context = {}
     if request.user.is_recruiter:
-        return render(request, 'user/dashboard_recruiter.html')
-    return render(request, 'user/dashboard_candidate.html')
+        return render(request, 'user/dashboard_recruiter.html', context)
+    
+    # For candidates, show pending contact requests
+    from resume.models import ContactRequest
+    context['pending_requests'] = ContactRequest.objects.filter(
+        resume__user=request.user, 
+        status=ContactRequest.Status.PENDING
+    ).select_related('resume', 'recruiter')
+    
+    return render(request, 'user/dashboard_candidate.html', context)

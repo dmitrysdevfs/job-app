@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Пошук кандидатів | JobApp{% endblock %}
+
+{% block content %}
+<div class="mb-5">
+  <h2 class="fw-bold fs-3">Пошук талантів</h2>
+  <p class="text-muted">Переглядайте анонімні профілі кандидатів та запитуйте контакти для подальшого спілкування.</p>
+</div>
+
+<div class="row g-4">
+  {% for resume in resumes %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+      <div class="card-body p-4 d-flex flex-column">
+        <div class="mb-3">
+          <h5 class="fw-bold mb-1">{{ resume.title }}</h5>
+          <div class="d-flex align-items-center text-muted small mt-2">
+            {% if resume.is_anonymous %}
+            <span class="badge bg-info-subtle text-dark border border-info-subtle me-2">
+              <i class="bi bi-incognito me-1"></i> Анонімно
+            </span>
+            {% endif %}
+            {% if resume.expected_salary %}
+            <span class="text-success fw-bold me-3">
+              <i class="bi bi-cash-stack me-1"></i> {{ resume.expected_salary }} грн
+            </span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="text-muted flex-grow-1 mb-4" style="font-size: 0.9rem;">
+          {{ resume.description|truncatechars:150 }}
+        </div>
+
+        <div class="mt-auto d-flex justify-content-between align-items-center">
+          <span class="text-muted small">Оновлено: {{ resume.updated_at|date:"d.m.Y" }}</span>
+          <a href="{% url 'resume:detail' resume.pk %}" class="btn btn-primary btn-sm px-3">Детальніше</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center py-5">
+    <p class="text-muted">На даний момент жодного резюме не знайдено.</p>
+  </div>
+  {% endfor %}
+</div>
+
+<style>
+  .hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-2px);
+  }
+
+  .transition-all {
+    transition: all 0.2s ease-in-out;
+  }
+</style>
+{% endblock %}
